@@ -1,0 +1,42 @@
+USE projetoRedesLocalDb;
+
+CREATE TABLE IF NOT EXISTS `projetoRedesLocalDb`.`users` (
+  `Id` BIGINT NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(100) NOT NULL,
+  `Email` VARCHAR(100) NOT NULL,
+  `Password` VARCHAR(200) NOT NULL,
+  `UserIdentifier` VARCHAR(250) NOT NULL,
+  PRIMARY KEY (`Id`));
+
+CREATE TABLE IF NOT EXISTS  `projetoRedesLocalDb`.`authors` (
+  `Id` BIGINT NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(100) NOT NULL,
+  `Description` VARCHAR(400) NULL,
+  `UserId` BIGINT NOT NULL,
+  PRIMARY KEY (`Id`),
+  INDEX `FK_AUTHOR_USER_idx` (`UserId` ASC) VISIBLE,
+  CONSTRAINT `FK_AUTHOR_USER`
+    FOREIGN KEY (`UserId`)
+    REFERENCES `projetoRedesLocalDb`.`users` (`Id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+CREATE TABLE IF NOT EXISTS  `projetoRedesLocalDb`.`books` (
+  `Id` BIGINT NOT NULL AUTO_INCREMENT,
+  `Title` VARCHAR(100) NOT NULL,
+  `Description` VARCHAR(400) NULL,
+  `UserId` BIGINT NOT NULL,
+  `AuthorId` BIGINT NOT NULL,
+  PRIMARY KEY (`Id`),
+  INDEX `FK_BOOK_USER_idx` (`UserId` ASC) VISIBLE,
+  INDEX `FK_BOOK_AUTHOR_idx` (`AuthorId` ASC) VISIBLE,
+  CONSTRAINT `FK_BOOK_USER`
+    FOREIGN KEY (`UserId`)
+    REFERENCES `projetoRedesLocalDb`.`users` (`Id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_BOOK_AUTHOR`
+    FOREIGN KEY (`AuthorId`)
+    REFERENCES `projetoRedesLocalDb`.`authors` (`Id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);

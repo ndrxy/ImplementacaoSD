@@ -1,0 +1,36 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      # Variáveis de ambiente
+      - DB_SERVER=mysql-db            
+      - DB_USER=root                  
+      - DB_PASSWORD=2QbT14ivWuL8      
+      - DB_NAME=projetoRedesLocalDb   
+      - USE_DOCKER_DB=true
+      - DB_PORT=3306            
+      - ASPNETCORE_ENVIRONMENT=Development
+
+    depends_on:
+      - mysql-db 
+    restart: always
+
+  mysql-db: 
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=2QbT14ivWuL8
+      - MYSQL_DATABASE=projetoRedesLocalDb
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init-scripts:/docker-entrypoint-initdb.d
+
+volumes:
+  mysql_data:
