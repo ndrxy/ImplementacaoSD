@@ -1,16 +1,18 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+
+RUN apt-get update && apt-get install -y git
+
 WORKDIR /app
 
-COPY src/ .
+RUN git clone https://github.com/ndrxy/RedesAvaliacao1 .
 
-WORKDIR projetoRedes.API
+WORKDIR /app/src/projetoRedes.API
 
-RUN dotnet restore
-RUN dotnet publish -c Release -o /app/out
+RUN dotnet publish -c Release -o /app/published-api-output
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 
-COPY --from=build-env /app/out .
+COPY --from=build-env /app/published-api-output .
 
 ENTRYPOINT ["dotnet", "projetoRedes.API.dll"]
