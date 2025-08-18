@@ -6,16 +6,13 @@ WORKDIR /app
 
 RUN git clone https://github.com/ndrxy/RedesAvaliacao1 .
 
-COPY src/ .
+WORKDIR /app/src/projetoRedes.API
 
-WORKDIR projetoRedes.API
-
-RUN dotnet restore
-RUN dotnet publish -c Release -o /app/out
+RUN dotnet publish -c Release -o /app/published-api-output
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 
-COPY --from=build-env /app/out .
+COPY --from=build-env /app/published-api-output .
 
 ENTRYPOINT ["dotnet", "projetoRedes.API.dll"]
