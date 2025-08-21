@@ -1,43 +1,15 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using projetoRedes.API.Filters;
 using projetoRedes.API.Token;
 using projetoRedes.Application;
 using projetoRedes.Domain.Security;
 using projetoRedes.Infrastructure;
-using projetoRedes.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<ITokenProvider, HttpContextValue>();
-
-builder.Services.AddDbContext<MyDbContext>(options =>
-{
-    if (Environment.GetEnvironmentVariable("USE_DOCKER_DB") == "true")
-    {
-        var dbServer = builder.Configuration["DB_SERVER"];
-        var dbDatabase = builder.Configuration["DB_NAME"];
-        var dbUser = builder.Configuration["DB_USER"];
-        var dbPassword = builder.Configuration["DB_PASSWORD"];
-        var dbPort = builder.Configuration["DB_PORT"];
-
-        var connectionString = $"Server={dbServer};Port={dbPort};Database={dbDatabase};User Id={dbUser};Password={dbPassword};";
-
-        var serverVersion = ServerVersion.AutoDetect(connectionString);
-        
-        options.UseMySql(connectionString, serverVersion, mySqlOptions =>
-        {
-        });
-    }
-
-    else
-    {
-        var connectionString = builder.Configuration.GetConnectionString("Connection");
-        options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-    }
-});
 
 builder.Services.AddControllers();
 
