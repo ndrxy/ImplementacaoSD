@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using projetoRedes.API.Filters;
 using projetoRedes.API.Token;
@@ -13,7 +12,7 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddScoped<ITokenProvider, HttpContextValue>();
 
-builder.Services.AddDbContext<MyDbContext>(options =>
+/*builder.Services.AddDbContext<MyDbContext>(options =>
 {
     if (Environment.GetEnvironmentVariable("USE_DOCKER_DB") == "true")
     {
@@ -37,7 +36,7 @@ builder.Services.AddDbContext<MyDbContext>(options =>
         var connectionString = builder.Configuration.GetConnectionString("Connection");
         options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
     }
-});
+});*/
 
 builder.Services.AddControllers();
 
