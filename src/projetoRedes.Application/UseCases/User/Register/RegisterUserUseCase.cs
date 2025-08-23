@@ -5,6 +5,7 @@ using projetoRedes.Communication.Requests;
 using projetoRedes.Communication.Responses;
 using projetoRedes.Domain.Repositories;
 using projetoRedes.Domain.Security;
+using projetoRedes.Exceptions.ExceptionsBase;
 
 namespace projetoRedes.Application.UseCases.User;
 
@@ -61,13 +62,13 @@ public class RegisterUserUseCase : IRegisterUserUseCase
 
         var emailExists = await _repository.ExistsActiveUserWithEmail(req.Email);
         if (emailExists || result.IsValid == false)
-            throw new Exception();
+            result.Errors.Add(new FluentValidation.Results.ValidationFailure(string.Empty, "Já existe um usuário cadastrado com o email informado"));
 
         if (result.IsValid == false)
         {
             var errorMessages = result.Errors.Select(e => e.ErrorMessage).ToList();
 
-            throw new Exception();
+            throw new ErrorOnValidationException(errorMessages);
         }
     }
 }
