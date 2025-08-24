@@ -8,11 +8,11 @@ services:
     environment:
       # Variáveis de ambiente
       - DB_SERVER=mysql-db            
-      - DB_USER=root                  
-      - DB_PASSWORD=${DB_PASSWORD}      
-      - DB_NAME=projetoRedesLocalDb   
+      - DB_USER=${dbUser}                  
+      - DB_PASSWORD=${dbPwd}      
+      - DB_NAME=${dbName}   
       - USE_DOCKER_DB=true
-      - DB_PORT=3306           
+      - DB_PORT=${dbPort}           
       - ASPNETCORE_ENVIRONMENT=Development
 
     depends_on:
@@ -24,8 +24,8 @@ services:
     container_name: mysql-db
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-      - MYSQL_DATABASE=projetoRedesLocalDb
+      - MYSQL_ROOT_PASSWORD=${dbPwd}
+      - MYSQL_DATABASE=${dbName}
     ports:
       - "3307:3306"
     volumes:
